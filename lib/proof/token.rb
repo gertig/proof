@@ -24,6 +24,9 @@ module Proof
       else
         data_immutable = data.clone
       end
+      puts "PROOF"
+      puts "data_immutable"
+      puts data_immutable
       token = JWT.encode(data_immutable, secret_key, algorithm)
       new(data_immutable, secret_key, algorithm, token)
     end
