@@ -17,7 +17,7 @@ module Proof
       @token = token
     end
 
-    def self.from_data(data, expire_token=true, secret_key=Rails.application.secrets.secret_key_base, algorithm='HS256', expiration_date=24.hours.from_now.to_i)
+    def self.from_data(data, expire_token=true, secret_key=Rails.application.credentials.secret_key_base, algorithm='HS256', expiration_date=24.hours.from_now.to_i)
       # Must Clone Data Hash to Avoid Side Effects
       if expire_token
         data_immutable = data.clone.merge({ exp: expiration_date })
@@ -28,7 +28,7 @@ module Proof
       new(data_immutable, secret_key, algorithm, token)
     end
 
-    def self.from_token(token, secret_key=Rails.application.secrets.secret_key_base, algorithm='HS256')
+    def self.from_token(token, secret_key=Rails.application.credentials.secret_key_base, algorithm='HS256')
       decoded = JWT.decode(token, secret_key, true, { algorithm: algorithm })
       data = decoded[0]
       if algorithm != algorithm_from_header(decoded[1])
